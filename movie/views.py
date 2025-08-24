@@ -23,6 +23,10 @@ def home(request):
 def about(request):
    return render(request, 'about.html',{'name': 'Sara Hurtado'})
 
+def signup(request):
+   email= request.GET.get('email')
+   return render(request, 'signup.html', {'email': email})
+
 def statistics_view(request):
     matplotlib.use('Agg')
 
@@ -77,5 +81,5 @@ def statistics_view(request):
     buffer_genre.close()
     graphic_genre = base64.b64encode(image_png_genre).decode('utf-8')
 
-    # Renderizar la plantilla stadistics.html con ambas gráficas
+    # Renderizar la plantilla statistics.html con ambas gráficas
     return render(request, 'statistics.html', {'graphic_year': graphic_year, 'graphic_genre': graphic_genre})
