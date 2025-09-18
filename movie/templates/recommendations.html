@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Recomendador de Películas</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="prompt" class="form-label">Describe la película que quieres ver:</label>
+            <input type="text" class="form-control" id="prompt" name="prompt" required value="{{ prompt }}">
+        </div>
+        <button type="submit" class="btn btn-success">Buscar recomendación</button>
+    </form>
+    {% if result %}
+    <div class="mt-4 alert alert-info">
+        <h4>Película recomendada:</h4>
+        <strong>{{ result.title }}</strong><br>
+        {{ result.description }}<br>
+        <em>{{ result.genre }} | {{ result.year }}</em>
+    </div>
+    {% elif prompt %}
+    <div class="mt-4 alert alert-warning">
+        No se encontró una película similar para tu descripción.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

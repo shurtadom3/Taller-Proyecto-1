@@ -1,8 +1,14 @@
+
+
+import numpy as np
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
+
 from django.shortcuts import render
 from django.http import HttpResponse
 import matplotlib.pyplot as plt
 import matplotlib
-import io
 import urllib,base64
 
 
@@ -83,3 +89,33 @@ def statistics_view(request):
 
     # Renderizar la plantilla statistics.html con ambas gráficas
     return render(request, 'statistics.html', {'graphic_year': graphic_year, 'graphic_genre': graphic_genre})
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
+load_dotenv('openAI.env')
+client = OpenAI(api_key=os.environ.get('openAI_key'))
+
+def recommendations(request):
+    result = None
+    prompt = ''
+    if request.method == 'POST':
+        prompt = request.POST.get('prompt', '')
+        if prompt:
+            response = client.embeddings.create(
+                input=[prompt],
+                model="text-embedding-3-small"
+            )
+            prompt_emb = np.array(response.data[0].embedding, dtype=np.float32)
+            best_movie = None
+            max_similarity = -1
+            for movie in Movie.objects.all():
+                if hasattr(movie, 'emb') and movie.emb:
+                    movie_emb = np.frombuffer(movie.emb, dtype=np.float32)
+                    similarity = cosine_similarity(prompt_emb, movie_emb)
+                    if similarity > max_similarity:
+                        max_similarity = similarity
+                        best_movie = movie
+            result = best_movie
+    return render(request, 'recommendations.html', {'result': result, 'prompt': prompt})
