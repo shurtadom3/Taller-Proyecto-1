@@ -1,5 +1,4 @@
 
-
 import numpy as np
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -115,3 +114,4 @@ def recommendations(request):
                         best_movie = movie
             result = best_movie
     return render(request, 'recommendations.html', {'result': result, 'prompt': prompt})
+
