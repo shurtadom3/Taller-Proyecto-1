@@ -4,14 +4,11 @@ import numpy as np
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
-
 from django.shortcuts import render
 from django.http import HttpResponse
 import matplotlib.pyplot as plt
 import matplotlib
 import urllib,base64
-
-
 from .models import Movie
 # Create your views here.
 
@@ -89,11 +86,10 @@ def statistics_view(request):
 
     # Renderizar la plantilla statistics.html con ambas gráficas
     return render(request, 'statistics.html', {'graphic_year': graphic_year, 'graphic_genre': graphic_genre})
+
 def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
+
 load_dotenv('openAI.env')
 client = OpenAI(api_key=os.environ.get('openAI_key'))
 
