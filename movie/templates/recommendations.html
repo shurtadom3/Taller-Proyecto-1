@@ -1,25 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Recomendador de Películas</h2>
+    <h2> Recommend for Movies</h2>
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="prompt" class="form-label">Describe la película que quieres ver:</label>
+            <label for="prompt" class="form-label">Describe the movie you want to see:</label>
             <input type="text" class="form-control" id="prompt" name="prompt" required value="{{ prompt }}">
         </div>
-        <button type="submit" class="btn btn-success">Buscar recomendación</button>
+        <button type="submit" class="btn btn-success">Recommend</button>
     </form>
     {% if result %}
-    <div class="mt-4 alert alert-info">
-        <h4>Película recomendada:</h4>
-        <strong>{{ result.title }}</strong><br>
-        {{ result.description }}<br>
-        <em>{{ result.genre }} | {{ result.year }}</em>
-    </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-4">
+                      <img src="{{ result.image.url }}" class="card-img-top" alt="Movie image" style="width: 400px; height: auto; margin: 0 auto; display: block;">
+                    <div class="card-body">
+                        <h4 class="card-title"><b>{{ result.title }}</b></h4>
+                        <p class="card-text">{{ result.description }}</p>
+                        <em>{{ result.genre }} | {{ result.year }}</em>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% elif prompt %}
     <div class="mt-4 alert alert-warning">
-        No se encontró una película similar para tu descripción.
+    No similar movie found for your description.
     </div>
     {% endif %}
 </div>
